@@ -4,6 +4,10 @@
   <title>Chaitra Navratri 2026 - 9 Heilige Dagen</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8f2d11">
+  <meta name="description" content="Chaitra Navratri 2026: 9 Heilige Dagen met dagkleuren, godinnen, bhog, mantra's en praktische Kalash Puja uitleg.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/navratri-icon.svg" type="image/svg+xml">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -490,5 +494,15 @@
       <p>Volgens de traditie zijn deze negen dagen gewijd aan de negen manifestaties van Maa Durga en staan ze symbool voor de overwinning van het goede op het kwade.</p>
     </footer>
   </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js').catch(function () {
+          // registratie fout stil houden voor eenvoudige statische hosting
+        });
+      });
+    }
+  </script>
 </body>
 </html>
