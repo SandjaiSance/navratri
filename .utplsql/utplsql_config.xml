@@ -1,0 +1,17 @@
+<utPLSQL>
+    <config>
+        <test_environment>
+            <database>
+                <host>localhost</host>
+                <port>1521</port>
+                <service_name>orcl</service_name>
+                <username>test_user</username>
+                <password>test_password</password>
+            </database>
+        </test_environment>
+        <reporting>
+            <output_format>html</output_format>
+            <output_directory>test/reports</output_directory>
+        </reporting>
+    </config>
+</utPLSQL>

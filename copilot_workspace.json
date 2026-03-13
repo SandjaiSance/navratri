@@ -1,0 +1,52 @@
+{
+  "name": "Oracle PL/SQL Development Workspace",
+  "description": "Development workspace for Oracle PL/SQL packages and unit tests",
+  "version": "1.0.0",
+  "workspace": {
+    "type": "oracle-plsql",
+    "schema": "delphidba",
+    "testFramework": "utPLSQL"
+  },
+  "structure": {
+    "packages": "Packages/",
+    "package_bodies": "Package_bodies/",
+    "tests": "Package_bodies/"
+  },
+  "conventions": {
+    "packageSpecification": ".spc",
+    "packageBody": ".bdy",
+    "testSuffix": "_test",
+    "namingConvention": "snake_case"
+  },
+  "tools": {
+    "database": "Oracle Database",
+    "testRunner": "utPLSQL",
+    "versionControl": "Git"
+  },
+  "packages": [
+    {
+      "name": "sup_utilities",
+      "type": "utility",
+      "description": "Support utilities for session management, conversions, and general helper functions",
+      "hasTests": true
+    },
+    {
+      "name": "sup_date_actions",
+      "type": "utility", 
+      "description": "Date and time related utility functions",
+      "hasTests": true
+    },
+    {
+      "name": "pcs_rcn_actions",
+      "type": "business",
+      "description": "RCN (Reconciliation) related business logic",
+      "hasTests": false
+    },
+    {
+      "name": "tmn_utilities",
+      "type": "utility",
+      "description": "TMN (Transmission) utilities",
+      "hasTests": false
+    }
+  ]
+}
