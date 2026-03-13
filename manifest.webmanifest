@@ -2,7 +2,7 @@
   "name": "Chaitra Navratri 2026 - 9 Heilige Dagen",
   "short_name": "Navratri 2026",
   "description": "Mobiele Navratri-pagina met 9 dagen, godinnen, kleuren, bhog, mantra's en Kalash Puja.",
-  "start_url": "./Navratri_mob_PWA.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#fff8ee",
