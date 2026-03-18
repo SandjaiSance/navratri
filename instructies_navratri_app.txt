@@ -1,0 +1,40 @@
+Pagina aanpassen:
+------------------
+https://github.com/SandjaiSance/navratri
+
+
+Op github workspace of lokaal-clone.
+log in op github
+
+Wijzigingen worden gemaakt in Navratri_mob_PWA.html en overgekopieerd naar index.html
+  "Copy-Item -Path "Navratri_mob_PWA.html" -Destination "index.html" -Force"
+
+git base:
+
+git add [index.html](http://_vscodecontentref_/2) Navratri_mob_PWA.html
+git commit -m "Mobile layout improvements"
+git push
+
+Let op dat je bij wijzingen ook meeneemt:
+
+M manifest.webmanifest
+M sw.js
+
+Voer nu exact uit:
+ git add sw.js manifest.webmanifest
+ git commit -m "Update commentaar"
+ git push
+
+Op MOBIEL:
+----------
+Je kan 'Navratri' app op je startscherm opslaan:
+
+Open je site in Chrome.
+Tik rechtsboven op ⋮ (menu).
+Kies:
+Install app (als die optie er staat), of
+Toevoegen aan startscherm.
+Bevestig met Installeren / Toevoegen.
+Daarna staat hij als app-icoon op je startscherm.
+
+Bij update is het soms nodig op 't startscherm te verwijderen en opnieuw aan te maken.
