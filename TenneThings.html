@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TenneThings</title>
+    <style>
+        .container {
+            width: 100%;
+            background-color: lightblue;
+            padding: 20px;
+        }
+
+        .content {
+            width: 90%;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            margin: 0 auto;
+            background-color: white;
+            padding: 16px;
+            text-align: left;
+        }  
+        h1 {
+            color: #0056b3;
+            font-size: 20px;
+        }
+        h2 {
+            font-size: 18px;
+            background-color: #d3d3d3; /* Lichtgrijze achtergrond */
+            padding: 10px; /* Optioneel: voor wat ruimte rond de tekst */
+        }
+        h3 {
+            color: green;   
+            font-size: 16px;
+        }
+        .green { 
+            color: green;   
+        }
+        .blue { 
+            color: blue;   
+        }
+        .brown { 
+            color: RGB(129, 69, 19);  <!-- GoudBruin : rgba(88, 65, 4, 0.644)-->
+			font-weight: bold;
+            font-size: 28px;
+        }
+        .grey-bg {
+            background-color: #d3d3d3; /* Lichtgrijze achtergrond */
+            padding: 10px; /* Optioneel: voor wat ruimte rond de tekst */
+        }
+    </style>
+     <link rel="icon" href="image/S_logo.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+            <h1 id="top"> <span class="brown">My TenneThings!</span></h1>
+
+            <h2>Inhoudsopgave</h2>
+            <ul>
+                <li><a href="#todo">TO DO</a></li>
+                <li><a href="#okr-2025">OKR 2025</a></li>
+                <li><a href="#story-git">STORY & GIT</a></li>
+                <li><a href="#release-proces">RELEASE PROCES</a></li>
+                <li><a href="#sergeant-ctrls">SERGEANT CTRLS</a></li>
+                <li><a href="#apex">APEX</a></li>
+                <li><a href="#tech">Tech</a>
+                    <ul>
+                        <li><a href="#tech-sqlcl">SQLcl</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        <h2 id="todo">TO DO</h2>
+
+           <h2 id="okr-2025">OKR 2025</h2>
+           <ol>
+            <li>Effectief vergaderen</li>
+            <li>Monitoring. Meten is weten; een belangrijk aspect om verbetereingen te identificeren.</li>
+            <li>1-proces, 1-loket, stuur feedback loops</li>
+            <li>Future proof. Nieuwe ontwikkelingen, opleiden, slim samenwerken, testketen, out of the box en realistisch  </li>
+            <p> Hierbij raakt 1. alle andere okr's. </p>
+           </ol>
+        <h3 id="story-git">STORY & GIT</h3>
+            <p>Stappenplan</p>
+            <ul>
+            <li>Vanuit Jira wordt er een branche gemaakt voor een story</li>
+            <li>Let op: in de Release-map moet er een apart map (bv. Tran-0000) worden aangemaakt om story-opleveringen in te plaatsen</li>
+            <li>Data wijzigingen moeten ook in de DATA map worden verwerkt.</li>
+            <li>Voor aanmaak of wijzigen van Database-objecten hoeven er geen aparte script te worden op geleverd </li>
+            <li>Git wijzigingen worden gereleased</li>
+            <li>Bij aanmaak dient er wel een UnInstall-een script te worden gemaakt</li>
+            
+            <li>Tags: bij sprint wissel controleren!</li></ul>
+
+        <h2 id="release-proces">RELEASE PROCES</h2>
+
+            <h3>GIT </h3>
+            <p>Bij sprint overgang extra aandacht voor tags.</p>
+
+            <h3>Release tech details</h3>
+            <h4>Handmatig een build maken:</h4> 
+            <p>Ga in Jenkins naar ' Delphi build > delphi oracle > DEV'  en start 'Build now'.</p>
+            <p>Meld issues bij CICD, als bijvoorbeeld de build niet automatisch wordt aangemaakt, bij elk merge met DEV</p>
+            <h4>Jenkins file:</h4> 
+            <p>Elk omgeving heeft een eigen Jenkins file voor deployements. In GIT bevinden deze zich onder de hoofdapplicatie project. 
+            <ul>Zo kent AVY bijvoorbeeld (clone deze apart om het te bekijken/wijzigen): 
+                <li>AVY_deploy_t12</li>
+                <li>AVY_deploy_t3</li>
+                <li>AVY_deploy_acce</li>
+                <li>AVY_deploy_prod</li>
+            </ul> 
+            Een Jenkins file is in de taal Groovy geschreven, wat een beknopte versie van Java is.
+           </p>
+
+            <h3>Install Release</h3>
+            <p>Bij het mergen van een wijzigng in GIT, wordt er automatisch een proces getriggered om een opleveringen naar Ontwikkel uit te voeren.</p>
+            <p> Voor een oplevereing naar Test, Acc of Prod (bijv. T12), moet er een release worden opgegeven (in JIRA, de sprintnaam)
+                en via 'Build with parameters' de deployement gestart.</p>
+
+            <ul> Stappen:
+                <li>Starts Jenkins</li>
+                <li>kies [applicatie]_Deployements > kies [applicatie]_Deploy_[omgeving] en start Build with parameters</li>
+                <li>Vul sprintnummer (vb. 202547) in en druk op Build. (Let op: bij de ene laatste stap blijft 't proces hangen. Klik erop en druk op proceed.')</li>
+                <br>
+                <li><blue>Handmatige acties:
+                    Soms zijn er bij een Release handmatige acties, bijvoorbeeld een hotfix, waarbij een story handmatig moeten worden gezet in Productie.</blue> 
+                  <ul>
+                  <li>Plaaats de inhoud van de hotfix (story-inhoud) in een deelmap (bijvoorbeeld Algemeen Q:\SRY ) op de VDI machine</li>
+                  <li>Deze hotfix is dan bereikbaar vanuit de productie machine op schijf J (Data J:\Algemeen\SRY)</li>
+                  <li>Voor de scripts direct op de juiste productie database uit.</li>
+                  </ul> <br>
+                  <li><blue>Handmatige acties:
+                      Uitzetten van een publicatie.</blue>
+                    <ul>
+                    <li>Verwijder de Job van de desbetreffende publicatie in Delphi (bijv. ATR_01)</li>
+                    <li>Zoek in tabel DQF_DEFINITIONS de desbetreffende prublicatie op </li>
+                    <li>Zet de BVALIDITY_FROM in de toekomst, bijv. 01-01-2099 </li>
+                    <li>Zet de IND_ACTIVE_FILL en de IND_ACTIVE_CHECK op 'N' </li>
+                    </ul>
+                 </ul>    
+
+            <h3>UnInstall Release</h3>
+                Het terugdraaien van een story is voornamelijk een handmatige actie. Hierbij kunnen we 2 gevallen onderscheiden:
+            <ol>
+                <li>Er is nog geen merge geweest met de DEV branch en de wijzigingen zijn niet deployed naar Test</li>
+                <ul> 
+                  <li>Er is geen actie nodig in de DEV branch en ook niet in de Test omgeving</li>
+                  <li>Check out de feature story branch</li>
+                  <li>Als er wijzgingen zijn in de Release map, maak dan nieuw (voor de volgende sprint) map aan</li>
+                  <li>Verplaatst (GIT) de wijzigingen naar de nieuwe map</li>
+                  <li>Ruim bestanden en mappen op in de oude map (GIT) en commit de wijzigngen</li> <br>
+                </ul>
+
+                <li>De wijzigingen zijn reeds gemerged en deployed naar Test</li>
+                <ul> 
+                  <li>Draai de wijzigingen handmatig terug in Test, door de UnInstall scripts te draaien en voor ddl de vorige versie </li>
+                  <li>Check out de DEV branch</li>
+                  <li>Verwijder van de Release mappen de wijzingen</li>
+                  <li>Plaats voor ddl-objecten de vorige versie terug. Een manier om de vorige versie terug te krijgen is om een compare <br>
+                      uit te voeren en van daaruit het origineel op te slaan.</li>
+                  <li>Commit de wijzigingen in de DEV branch. Voor de feature branch volg de acties uit stap 1.</li>
+                  <li>Update de status van de story en geef een kort verslag in Comment</li>
+
+                </ul>
+            </ol>
+
+            <h3>Tags </h3>
+                stappen voor het aanmaken van een tag:
+                <ol>
+                    <li>Ga in Windows Explorer naar de gewenste map (e.g. <i>D:\GIT\delphi_oracle\delphidba</i>)</li>
+                    <li>Ga met de rechtermuisklik naar TortoiseGit > Create Tag</li>
+                    <li>Vul in het Name Tag veld de tagnaam in (e.g. <i>Delphi_oracle_02.88.00</i>) </li>
+                    <li>Push je wijzigingen door. Rechtermuisklik > Git Sync > Push tags </li>
+                    <li>Maak nieuwe mappen aan</li>
+                </ol>
+
+        <h2 id="sergeant-ctrls">SERGEANT CTRLS</h2>
+
+            <p>Ga naar de productie machine: connect met Remote Desktop naar <span class="green">alp-ts00017.alfa.local</span>. </p>
+            <h3>STAP 1</h3>
+            <a href="TenneT_instructies_doorschakeling.html">Doorschakeling storingnummers naar eindbestemming</a>
+            <h3>STAP 2</h3>
+            <p>Connect naar de desbetreffende database en run de scripts per omgeving. Deze staan op <span class="green"> J:\\Projecten\Beheer\Beheer\<applictaienam></applictaienam></span>.</p>
+            <p>Beoordeel uitkomst van de scripts en als relevant benoem het in de mail.</p>
+            <ol>
+              <li>AETHER: ( \Aether-Queries\ )</li>
+              <ul>
+                <li>DPI_PCS_TLE.sql                          >> beoordeel resultaat</li>
+                <li>ontbrekende_ptus_web_emergency_power.sql >> geen resultaat verwacht</li>
+                <li>DPI_FAILED_JOBS.sql                      >> geen resultaat verwacht</li><br>
+                \Aether_balancedelta\ <br>
+                <li>controleer_compleetheid_balansdelta.sql >> geen resultaat verwacht</li>
+                <li>DPI PCS TLE.sql                         >> beoordeel resultaat</li>
+              </ul> <br>             
+              <li>AVY : ( \Delphi - AVY\Queries\AVY - Queries\ ) </li>
+              <ul>
+                <li>int_log_books.sql                       >> geen resultaat verwacht</li>
+                <li>missing_acks.sql                        >> geen resultaat verwacht</li>
+                <li>pcs_tle.sql                             >> geen resultaat verwacht</li><br>
+                Met extra aandacht, heeft input nodig: <br>
+                <li>update_verkeerde_gu_in_outage.sql </li>
+                <li>zet_een_bericht_op_in_q_configurations.sql</li>
+              </ul> <br>             
+              <li>DELPHI: ( \Delphi - AVY\Queries\Delphi - Queries\ ) </li>
+              <ul>
+                <li>aantal_publicaties_vs_verwacht.sql</li>
+                <li>ACER_buffer.sql                           >> resultaat beoordelen</li>
+                <li>DPI FAILED JOBS.sql                       >> resultaat beoordelen</li>
+                <li>DPI JOBS.sql                              >> resultaat beoordelen</li>
+                <li>DPI PCS TLE.sql                           >> resultaat beoordelen</li>
+                <li>dqf_results_foutieve_complete_status.sql  >> resultaat beoordelen. <span class="blue"> Zorg dat status zoveel mogelijk correct is! </span> </li>
+                <li>DQF_results_onterecht_niet_tijdig.sql     >> resultaat beoordelen</li>
+                <li>KPI Query - Timeliness.sql                >> resultaat beoordelen. <span class="blue">  Plaats resultaat in "J:\Projecten\Beheer\Beheer\Delphi - AVY\KPI cijfers" </span> </li>
+                <li>missing_ACE_and_Snapshots.sql             >> resultaat beoordelen</li>    
+                <li>missing_Erisk.sql                         >> resultaat beoordelen</li>
+                <li>pcs_rcn_download_messages.sql             >> resultaat beoordelen</li>
+                <li>queues_met_aantallen.sql                  >> resultaat beoordelen</li>                                                                            
+                <li>sup_nde_emt_types_aanvullen.sql           >> resultaat beoordelen</li>               
+              </ul>
+            </ol>   
+
+        <h2 id="apex">APEX </h2>
+            <h3>APEX - WEBSERVICE OPLEVEREN</h4>
+
+            <p>In Apex, ga naar SQL Workshop > RESTful Services.
+                Hier vind je (bijv. voor Aether) onder RESTful Data Services verschillende Modules (bijv.
+                request_handler).
+                Deze kun je openklappen en je vind de methods van de Modules, die je kan aanpassen.
+            </p>
+            <p>
+                Voor het exporten, klik je op 'RESTful Data Services' en vervolgens op Export. Je kan per module een
+                export maken en
+                deze inchecken in GIT (bijv. \aetherweb\aetherweb\Webservices)</p>
+
+            <p>In Apex-run <b>language omzetten:</b> &p_lang=NL (of EN)</p>
+
+            <p> ORDS moet herstart worden na het aanpassen van de rechten. Ik heb het Iwan gevraagd, maar ik zit nu in
+                overleg
+                Iwan gaat ORDS niet herstarten, dat moet via het OSB-team (in het Engels).</p>
+
+
+            <h3>APEX - Application Translation:</h3>
+
+            <p>Ga Shared Components > Globalization > Application Translation
+            <ul>
+                <li>Voer als eerste uit 'Seed translated text'( vergeet niet t vinkje te zetten)</li>
+                <li>Als er vertalingen gemaakt moeten worden, download het XLIFF bestand em maak je vertalingen</li>
+                <li>Upload het bestand met 'Apply XLIFF...'</li>
+                <ul>
+                    <li>Verwijder eerste het vorige bestand (select 100 > 106)</li>
+                    <li>Upload het nieuwe bestand</li>
+                    <li>Apply Checked het nieuwe bestand</li>
+                    <li>Publish</li>
+                </ul>
+                <li>Publish je wijzigingen</li>
+				
+				<p class="green">
+				Test het uit door &p_lang=NL (of EN) aan het eind van de url te plakken. <br> 
+				Let ook op dat je soms eerst je webbrowser moet herstarten, na een seed/publish. Ook je cookies verwijderen kan geen kwaad.<br>
+				Een publish is altijd nodig, een seed alleen als je teksten toevoegt of wijzigt.
+				</p>
+            </ul>
+            </p>
+            <h3>APEX - Language :</h3>
+                <p>functie: APEX_UTIL.GET_SESSION_LANGUAGE</p>
+                APEX_UTIL.GET_SESSION_STATE('LANGUAGE_PARAM')
+                <p> en APEX_UTIL.GET_LANGUAGE</p>
+            <h3>APEX - Text Messages:</h3>
+
+            <p>Ook is het mogelijk per pagina vertalingen aan te maken met Shared Components > Globalization > Text
+                Messages.
+                Vergeet de Seed en Publish niet!</p>
+
+            <p>Java script oplossing om kolomnamen samen te voegen.
+            <ol>
+                <li>voeg functie als p90090_header (vb package sup_gui_column_actions) toe (inhoud afhankelijk van
+                    gewenste headers).</li>
+                <li>In Apex voeg een hidden veld toe met als computation de aanroep van de functie</li>
+                <li>maak een DA aan after refresh die de javacode (itemvalue opvraag) uitvoerd:<br>
+                    apex.jQuery(this.triggeringElement).find('thead').prepend(apex.items.P90090_TABLE_HEADER.getValue());
+                </li>
+            </ol>
+            </p>
+
+        <h2 id="tech">Tech:</h2>
+            <p>Bij Foriegn-keys is het advies om de child-table-column een index te geven.
+                Anders kan dit leiden tot deadlocks!
+            </p>
+        
+          <h3>Monitoring</h3>
+            <p style="text-indent: 30px;"><a href="TenneT_Elasticsearch.html">Elastic Search</a></p>
+
+        <h3 id="tech-sqlcl">SQLcl</h3>
+            <p>SQLcl willen we voornamelijk inzetten voor releasing en gecontroleerd uitvoeren van deploy- en rollback-scripts:</p>
+            <table style="font-size: 14px; border-collapse: collapse; margin-left: 20px;">
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Verbinden database:</b></td>
+                    <td style="padding: 2px 0;"><code>sql -name &lt;connectie_naam&gt;</code> <small>(waarbij <i>&lt;connectie_naam&gt;</i> de naam van de connectie is zoals gedefinieerd in VS Code, bijv. <i>AetherDev</i>)</small></td>
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Deploy script draaien:</b></td>
+                    <td style="padding: 2px 0;"><code>@deploy.sql</code></td>
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Rollback script draaien:</b></td>
+                    <td style="padding: 2px 0;"><code>@rollback.sql</code></td>
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Logging starten:</b></td>
+                    <td style="padding: 2px 0;"><code>spool release_log.txt</code></td>
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Logging stoppen:</b></td>
+                    <td style="padding: 2px 0;"><code>spool off</code></td>
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap; padding: 2px 12px 2px 0; vertical-align: top;"><b>Sessie verlaten:</b></td>
+                    <td style="padding: 2px 0;"><code>exit</code></td>
+                </tr>
+            </table>
+
+            <h4>Projectinrichting</h4>
+            <p>Stappen voor het inrichten van een SQLcl-project:</p>
+            <ol style="font-size: 14px;">
+                <li>INIT: <code>project init -name AvySRY -schemas AVY</code></li>
+                <li>Maak een branch: <code>!git checkout -b feature-1</code></li>                
+                <li>Export: <code>project export [-o &lt;objectnaam&gt;]</code></li>
+            </ol>
+            <h4>Bouwproces</h4>
+            <p>Stappen voor het bouwen en exporteren van een database-object:</p>
+            <ol style="font-size: 14px;">
+                <li>Bouw database object en verifieer het in de database.</li>
+                <li>Voer stap 2 en 3 van Projectinrichting uit.</li>
+                <li>Stage met command: <code>Project stage</code>. Dit voegt de wijziging door in <code>/dist/next/change</code>.</li>
+                <li>Stage custom file met command: <code>Project stage add-custom -file-name &lt;filename&gt;</code>.</li>
+                <li>Doe een commit en push in GIT.</li>
+                <li>Genereer daarna het artifact met command: <code>project gen-artifact -version next</code>. Dit maakt in map <code>artifact\avy_test-next.zip</code> aan .
+                    <ol style="font-size: 14px; margin-top: 6px;">
+                        <li>Geef naam van de zip aan met <code>-name &lt;zipfilename&gt;</code>.</li>
+                        <li>Een commit is niet nodig bij artifact.</li>
+                    </ol>
+                </li>
+            </ol>
+
+            <h4>Deploy in Build en Test omgeving</h4>
+            <p>Vervolgstappen na het bouwproces voor uitlevering en controle:</p>
+            <ol style="font-size: 14px;">
+                <li>Deploy naar de <code>Build</code>-omgeving.
+                    <ol style="font-size: 14px; margin-top: 6px;">
+                        <li>Ga naar de build-omgeving: <code>sql.exe -name &lt;buildomgeving connectstring&gt;</code></li>
+                        <li>Deploy met: <code>project deploy -file artifact\&lt;zipfilename&gt; -verbose</code></li>
+                    </ol>
+                </li>
+                <li>Verify &amp; test in de <code>Test</code>-omgeving.
+                    <ol style="font-size: 14px; margin-top: 6px;">
+                        <li>Ga naar de test-omgeving: <code>sql.exe -name &lt;testomgeving connectstring&gt;</code></li>
+                        <li>Deploy met: <code>project deploy -file artifact\&lt;zipfilename&gt; -verbose</code></li>
+                    </ol>
+                </li>
+                <li>Merge de wijzigingen na een succesvolle controle.</li>
+            </ol>
+            <h4>Voorbeeld releaseproces</h4>
+            <p>Een eenvoudig releaseproces met SQLcl kan er als volgt uitzien:</p>
+            <ol style="font-size: 14px;">
+                <li>Open SQLcl en maak verbinding met de juiste omgeving, bijvoorbeeld Test of Acceptatie.</li>
+                <li>Start logging zodat je achteraf precies ziet wat is uitgevoerd.</li>
+                <li>Voer het deploy-script uit.</li>
+                <li>Controleer of het script zonder fouten is afgerond.</li>
+                <li>Stop de logging en sluit de sessie af.</li>
+                <li>Als de release teruggedraaid moet worden, voer je daarna het rollback-script uit.</li>
+            </ol>
+
+            <p>Voorbeeld:</p>
+            <pre style="font-size: 14px; margin-left: 20px;">sql -name AetherDev
+spool release_20260319.log
+@deploy.sql
+spool off
+exit</pre>
+
+            <p><small>Als het deploy-script fouten geeft, leg je de uitkomst vast in de log en kun je indien nodig daarna <code>@rollback.sql</code> uitvoeren.</small></p>
+
+        <h3>Partitioneren tabel: </h3>
+            <ol>
+                <li>Disable job, e.g. aether_balancedelta.save_atr_05</li>
+                <li>Verwijder Primary key, e.g. web_ble_pk </li>
+                <li>Verwijder Index, e.g. web_ble_perf_idx en web_ble_pk_idx</li>
+                <li>Verwijder Kolom id uit tabellen, e.g. web_bla_values en web_bla_values_jn (let op dml-package en trigger!) </li>
+                <li>Aanmaken Nieuwe unieke local index, e.g. web_ble_pk_idx op timeinterval_start_utc, timeinterval_end_utc, bla_id</li>
+                <li>Partitioner tabel (code is niet getest. Klik hier voor <a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/vldbg/evolve-nopartition-table.html#GUID-5FDB7D59-DD05-40E4-8AB4-AF82EA0D0FE5" 
+                    target="_blank">een voorbeeld</a> <br> </li>
+            </ol>
+
+       
+       
+       </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+﻿===== DhR\Admin_Ritten_2021.xlsx =====
+A19	Text=Verlies- en winstrekening	Formula=
+A20	Text=Inkomsten - Rijschool	Formula=
+B20	Text=21320.00	Formula==C16
+A21	Text=Kosten - Rijschool	Formula=
+B21	Text=5158.85	Formula==ROUND(B20*0.2419724736,2)
+A22	Text=Kosten - km	Formula=
+B22	Text=4038.51	Formula==ROUND(D16*0.23,2)
+A23	Text=Kosten - Internet/Mobiel	Formula=
+B23	Text=126.14	Formula==ROUND(B20*0.0059166667,2)
+C23	Text=9323.50	Formula==SUM(B21:B23)
+A24	Text=Totale kosten	Formula=
+B24	Text=9323.50	Formula==SUM(B21:B23)
+A25	Text=Resultaat	Formula=
+B25	Text=11996.50	Formula==B20-B24
+C26	Text=21320.00	Formula==B24+B25
+B20	Text=21320.00	Formula==C16
+B25	Text=11996.50	Formula==B20-B24	FormulaR1C1==R[-5]C-R[-1]C	DependsOnB20=True
+
+===== DhR\Admin_Ritten_2022.xlsx =====
+A19	Text=Verlies- en winstrekening	Formula=
+A20	Text=Inkomsten - Rijschool	Formula=
+B20	Text=45691.23	Formula=
+A21	Text=Kosten - Rijschool	Formula=
+B21	Text=4073.75	Formula=
+A22	Text=Kosten - km	Formula=
+B22	Text=9019.22	Formula=
+A23	Text=Kosten - Internet/Mobiel	Formula=
+B23	Text=306.40	Formula=
+A24	Text=Totale kosten	Formula=
+B24	Text=13399.37	Formula=
+A25	Text=Resultaat	Formula=
+B25	Text=32291.86	Formula=
+-- Row16 A:E --
+A16	Text=Totaal	Formula=
+B16	Text=1455.00	Formula==SUM(B3:B14)
+C16	Text=47287.50	Formula==SUM(C3:C14)
+D16	Text=39214.00	Formula==SUM(D3:D14)
+E16	Text=32.50	Formula=
+B20	Text=45691.23	Formula=45691.23
+B25	Text=32291.86	Formula=32291.86	FormulaR1C1=32291.86	DependsOnB20=False
+
+===== DhR\Admin_Ritten_2023.xlsx =====
+A19	Text=Verlies- en winstrekening	Formula=
+A20	Text=Inkomsten - Rijschool	Formula=
+B20	Text=54936.07	Formula=
+A21	Text=Kosten - Rijschool	Formula=
+B21	Text=3932.49	Formula=
+A22	Text=Kosten - km	Formula=
+B22	Text=10835.53	Formula=
+A23	Text=Kosten - Internet/Mobiel	Formula=
+B23	Text=123.92	Formula=
+A24	Text=Totale kosten	Formula=
+B24	Text=14891.94	Formula=
+A25	Text=Resultaat	Formula=
+B25	Text=40044.13	Formula=
+-- Row16 A:E --
+A16	Text=Totaal	Formula=
+B16	Text=1747.00	Formula==SUM(B3:B14)
+C16	Text=56777.50	Formula==SUM(C3:C14)
+D16	Text=47111.00	Formula==SUM(D3:D14)
+E16	Text=32.50	Formula=
+B20	Text=54936.07	Formula=54936.07
+B25	Text=40044.13	Formula=40044.13	FormulaR1C1=40044.13	DependsOnB20=False
+
+===== DhR\Admin_Ritten_2024.xlsx =====
+A19	Text=Verlies- en winstrekening	Formula=
+A20	Text=Inkomsten - Rijschool	Formula=
+B20	Text=56724.65	Formula=
+A21	Text=Kosten - Rijschool	Formula=
+B21	Text=4839.58	Formula=
+A22	Text=Kosten - km	Formula=
+B22	Text=8947.23	Formula=
+A23	Text=Kosten - Internet/Mobiel	Formula=
+B23	Text=321.73	Formula=
+A24	Text=Totale kosten	Formula=
+B24	Text=14108.54	Formula=
+A25	Text=Resultaat	Formula=
+B25	Text=42616.11	Formula=
+-- Row16 A:E --
+A16	Text=Totaal	Formula=
+B16	Text=1444.00	Formula==SUM(B3:B14)
+C16	Text=46930.00	Formula==SUM(C3:C14)
+D16	Text=38901.00	Formula==SUM(D3:D14)
+E16	Text=32.50	Formula=
+B20	Text=56724.65	Formula=56724.65
+B25	Text=42616.11	Formula=42616.11	FormulaR1C1=42616.11	DependsOnB20=False
+
