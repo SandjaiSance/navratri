@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Activation_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-7:activationdocument:6:3">
+  <mRID>ACT-TEST-0001</mRID>
+  <revisionNumber>1</revisionNumber>
+  <type>A39</type>
+  <sender_MarketParticipant.mRID codingScheme="A01">10YNL----------L</sender_MarketParticipant.mRID>
+  <sender_MarketParticipant.marketRole.type>A04</sender_MarketParticipant.marketRole.type>
+  <receiver_MarketParticipant.mRID codingScheme="A01">10Y1001A1001A83F</receiver_MarketParticipant.mRID>
+  <receiver_MarketParticipant.marketRole.type>A04</receiver_MarketParticipant.marketRole.type>
+  <createdDateTime>2026-08-03T12:00:00Z</createdDateTime>
+  <activation_Time_Period.timeInterval>
+    <start>2026-08-03T12:00Z</start>
+    <end>2026-08-03T13:00Z</end>
+  </activation_Time_Period.timeInterval>
+</Activation_MarketDocument>

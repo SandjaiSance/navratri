@@ -1,13 +1,13 @@
 $ErrorActionPreference = 'Stop'
 
 $baseDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$analysisYears = 2021..2024
-$outputYears = 2019..2024
+$analysisYears = 2021..2025
+$outputYears = 2019..2025
 $culture = [System.Globalization.CultureInfo]::InvariantCulture
 $nlCulture = [System.Globalization.CultureInfo]::GetCultureInfo('nl-NL')
 $maxHoursPerDay = 6
 $hourRate = [decimal]32.5
-$historicalReferenceYears = 2021..2023
+$historicalReferenceYears = 2022..2024
 $kmPerHourPattern = @(23, 24, 25, 26, 27, 28, 29, 30, 31)
 
 function Get-AnalysisPath {
@@ -127,7 +127,21 @@ function Get-GroupedIncomeDaysFromWorksheet {
         }
 
         $amount = Get-DecimalFromCellText ([string]$Worksheet.Cells.Item($row, 10).Text)
-        $transactionDate = [datetime]::ParseExact($dateText, 'dd/MM/yyyy', $culture)
+        
+        # Try to parse date with multiple format attempts
+        $transactionDate = $null
+        $dateFormats = @('dd/MM/yyyy', 'dd-MM-yyyy', 'd/M/yyyy', 'MM/dd/yyyy', 'yyyy-MM-dd')
+        foreach ($format in $dateFormats) {
+            if ([datetime]::TryParseExact($dateText, $format, $culture, [System.Globalization.DateTimeStyles]::None, [ref]$transactionDate)) {
+                break
+            }
+        }
+        
+        if ($transactionDate -eq $null) {
+            Write-Host "WARNING: Could not parse date '$dateText' at row $row"
+            continue
+        }
+        
         $key = $transactionDate.ToString('yyyy-MM-dd')
 
         if (-not $dailyAmounts.ContainsKey($key)) {

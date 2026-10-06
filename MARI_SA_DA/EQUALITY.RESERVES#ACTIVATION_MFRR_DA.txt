@@ -1,0 +1,75 @@
+EQUALITY.RESERVES#ACTIVATION_MFRR_DA ??
+* Change history
+* Review information
+* Intro
+* Functional Information8
+* Technical Information
+* Interface mapping
+* Integration
+* UAT status
+Change history
+VersionAuthorDateDescription1.0Don Boogerd03 Jun 2026 Initial version1.1Xander Pikaar14 Jul 2026 Technical details added1.2Xander Pikaar16 Jul 2026 measurement_Unit.name instead of quantity_Measurement_Unit.name1.3Don Boogerd23 Jul 2026 IM reviewed with Transparency Team and approvedReview information
+WhoReviewed (date)Nico Klaver16 Jul 2026 Xander PikaarCo-authorSander Maas20 Jul 2026 Peter de Roock23 Jul 2026 Intro
+MARI staat voor Manually Activated Reserves Initiative.
+In de Europese energiemarkt is MARI het gezamenlijke platform waarop Transmission System Operators (TSO's), TenneT, automatisch de goedkoopste beschikbare mFRR (manual Frequency Restoration Reserve)-energie kunnen uitwisselen om het elektriciteitsnet in balans te houden.
+Direct Activation (DA) is een standaard MARI-proces waarbij mFRR-biedingen direct worden geactiveerd voor het volgende kwartier om onverwachte onbalansen in het elektriciteitsnet op te lossen. Het MARI-platform voert hiervoor elke 15 minuten een optimalisatie uit.
+Functional Information8
+DescriptionEQUALITY.RESERVES#ACTIVATION_MFRR_DA Content    For mFRR Standard product (MARI) energy bids can be provided and activated with Scheduled Activation or Direct Activation. In this delivery the Direct Activations are provided per market Party (BSP) per ISP.Measure UnitMAWResolution (Program Time Unit)Duration is flexible. Value is "PTxM" where x is the number of minutes.
+Will always be between "PT15M" till PT29M"Time series1 .. 8Document typeActivation_MarketDocumentDDA deadline n/aFrequencyProvided in case of activation, within minutes after the end of the ISP of the activationPeriodWill always be between "PT15M" till PT29M"Source information* Page: 
+Module ASM 
+The delivery is used by the following publications* Page: 
+EDP_74MARI_DA Aggregated balancing energy bids ?? Functional requirementsRequirementDescribed in IMBuiltApproved
+Functional NotesTechnical Information
+XSDDocumentActivation_MarketDocumentXSDiec62325-451-7-activationdocument_v6_3Version6.3Namespaceiec62325.351:tc57wg16:451-7:activationdocument:6:3FileSource systemQueue name...Queue table...Publishing procedure...
+Target system (delphi)Queue namei_aq_evt_delphiQueue tablejms_i_evt_messagesDequeue Jobdequeue_i_aq_evt_messagesParser Packagercn_parse_activation_mdGlobal temporary table (GTT)activation_md_gtt
+activation_md_timeseries_gtt
+activation_md_period_gttProcessing procedure (RCN package)rcn_power_activations.process_activation_mfrr_daCheck Package...Table spacebln_data, bln_indexTarget tablesbln_power_activations. bln_pan_valuesUsed MRD tables...Parameter valuesMessage_typeequality.event translated to EQUALITY.RESERVESSubtypeACTIVATION_MFRR_DAlegal_ownerTTNlamu_source EQUALITY
+Table structure.Technical Notes
+Message example
+Interface mapping
+Comment:...Default/TranslationDatabaseXML  Unhappy FlowTable.columnElementLevelOccurrenceCheckCheck 
+Transformation/Default items are mandatory and must be seen as the "Happy Flow". 
+Any deviation will trigger an error message and a functional activity.Error message 
+(ENTSO-e Code)
+ Functional Activity  Activation_MarketDocument11Unique identification of the Activation_MarketDocument
+Example: 550e8400-e29b-41d4-a716-446655440000_8712423009332_202509232200pcs_rcn_receptions.document_mridmRID21A unique version within the mRIDpcs_rcn_receptions.document_versionrevisionNumber21Translate
+CodeTranslationB23OFFERS_TO_BE_ACTIVATEDpcs_rcn_receptions.document_typetype21Translate
+CodeTranslationA61STANDARD_MANUAL_FREQUENCY_RESTORATION_RESERVE_DIRECT_ACTIVATION
+Opmerking: DIRECT_ACTIVATION_MFRR is de echte vertaling van ENTSO-e voor dit process_type. Om onderscheid te maken tussen mFRRda voor MARI en "normaal" mFRRda moeten we hier een aparte vertaling maken. pcs_rcn_receptions.process_type
+bln_power_activations.power_typeprocess.processType21Expect
+CodeMeaning8716867999983TenneT NLNot usedsender_MarketParticipant.mRID21Expect
+CodeTranslationA10EAN-CodeNot usedsender_MarketParticipant.mRID.coding/Scheme1Expect
+CodeMeaningA04System operatorNot usedsender_MarketParticipant.marketRole.type21PartyID_String - EAN Code of BSP
+Not usedreceiver_MarketParticipant.mRID21Expect
+CodeMeaningA10EAN-CodeNot usedreceiver_MarketParticipant.mRID/codingScheme1Expect
+CodeMeaningA46Balancing Service ProviderNot usedreceiver_MarketParticipant.Role.type21Format 'yyyy-mm-ddThh24:mi:ssZ"Not usedcreatedDateTime21activation_Time_Period.timeInterval21Format 'yyyy-mm-ddThh24:mi:Z"Not usedstart31Format 'yyyy-mm-ddThh24:mi:Z"Not usedend31Expect
+CodeMeaning10YNL----------LThe NetherlandsNot useddomain.mRID21Translate
+CodeTranslationA01EIC_CODENot useddomain.mRID/@codingScheme1PartyID_String - EAN of BSP
+Not usedsubject_MarketParticipant.mRID21Expect
+CodeMeaningA10EAN-CodeNot usedsubject_MarketParticipant.mRID/@codingScheme1Expect
+CodeMeaningA46Balancing Service ProviderNot usedsubject_MarketParticipant.marketRole.type21Unique identification of the Energy Bid Document
+Example: 4284eeb6-8c66-4e4b-963e-5a5309f02e09
+ bln_pan_values.order_marketdocument_mridorder_MarketDocument.mRID21The identification of the version that distinguishes one evolution of a document from another.bln_pan_values.order_marketdocument_versionorder_MarketDocument.revisionNumber21TimeSeries21 .. 8 A unique identification of the time series.bln_pan_values.bid_idmRID31PartyID_String - EAN of BSP
+bln_power_activations.mpt_code
+bln_power_activations.mpt_object_type = 'BALANCING_SERVICE_PROVIDER'resourceProvider_MarketParticipant.mRID31 Translate
+CodeTranslationA10EAN13_CODEbln_power_activations.mpt_code_typeresourceProvider_MarketParticipant.mRID/codingScheme31 Expect
+CodeMeaningB74Offernot used businessType31Translate 
+CodeTranslation10YNL----------LBidding_zone of TenneT-NLNot usedacquiring_Domain.mRID31Expect
+CodeMeaningA01EIC_CODENot usedacquiring_Domain.mRID/@codingScheme1Expect
+CodeMeaning10YNL----------LBidding_zone of TenneT-NLNot usedconnecting_Domain.mRID31Expect
+CodeMeaningA01EICNot usedconnecting_Domain.mRID/@codingScheme1Expect
+CodeMeaningMAWMegawattbln_pan_values.power_unitmeasurement_Unit.name31Translate
+CodeTranslationA01UPA02DOWNbln_pan_values.directionflowDirection.direction31Expected
+CodeMeaningA07Activatednot usedmarketObjectStatus.status31Period31timeInterval41Format 'yyyy-mm-ddThh24:mi:Z"Use to determine
+* bln_pan_values.bvalidity_utc_from
+* bln_pan_values.isp_bvalidity_utc_from
+* ptu
+* ptu_date_locstart51Format 'yyyy-mm-ddThh24:mi:Z"Use to determine
+* bln_pan_values.bvalidity_utc_to
+* bln_pan_values.isp_bvalidity_utc_toend51PTxM
+Not used, always store PT15M in bln_pan_values.ptu_resolution
+Zie bouwinstructies!resolution41Point41Always 1.not usedposition51Quantity offered with 1 MW precision. Always positive values (no sign).)bln_pan_values.org_power
+used to calculate bln_pan_values.powerquantity51
+Integration
+00. System01. TypeReception02. Integration03. Sender organization04. Sender application05. Receiver organization06. Receiver application07. Document type08. Component09. ModuleUAT status
+SystemDelphiJirakeysummarystatuscustomfield_10004customfield_13905JQL and issue key arguments for this macro require at least one Jira application link to be configuredUATPATGoLive

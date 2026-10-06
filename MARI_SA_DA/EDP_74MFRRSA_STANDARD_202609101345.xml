@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Activation_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-7:activationdocument:6:3">
+  <mRID>EDP_74MFRRSA_STANDARD_202609101345</mRID>
+  <revisionNumber>1</revisionNumber>
+  <type>B23</type>
+  <process.processType>A60</process.processType>
+  <sender_MarketParticipant.mRID codingScheme="A10">8716867999983</sender_MarketParticipant.mRID>
+  <sender_MarketParticipant.marketRole.type>A04</sender_MarketParticipant.marketRole.type>
+  <receiver_MarketParticipant.mRID codingScheme="A10">8716904000009</receiver_MarketParticipant.mRID>
+  <receiver_MarketParticipant.marketRole.type>A46</receiver_MarketParticipant.marketRole.type>
+  <createdDateTime>2026-09-10T13:45:00Z</createdDateTime>
+  <activation_Time_Period.timeInterval>
+    <start>2026-09-10T13:45Z</start>
+    <end>2026-09-10T14:00Z</end>
+  </activation_Time_Period.timeInterval>
+  <domain.mRID codingScheme="A01">10YNL----------L</domain.mRID>
+  <subject_MarketParticipant.mRID codingScheme="A10">8712423010086</subject_MarketParticipant.mRID>
+  <subject_MarketParticipant.marketRole.type>A46</subject_MarketParticipant.marketRole.type>
+  <order_MarketDocument.mRID>8716904000009</order_MarketDocument.mRID>
+  <order_MarketDocument.revisionNumber>1</order_MarketDocument.revisionNumber>
+  <TimeSeries>
+    <mRID>660n7300-m18b-42d4-s626</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8716867991116</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A01</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>2.5</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>660o7300-m18b-42d4-s627</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8712423010086</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A02</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>85.5</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>660p7300-m18b-42d4-s628</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8716904000009</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A01</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>175.75</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>660q7300-m18b-42d4-s629</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8716867991116</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A02</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>95.25</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>660r7300-m18b-42d4-s630</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8712423010086</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A01</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>250</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>660s7300-m18b-42d4-s631</mRID>
+    <resourceProvider_MarketParticipant.mRID codingScheme="A10">8716904000009</resourceProvider_MarketParticipant.mRID>
+    <businessType>B74</businessType>
+    <acquiring_Domain.mRID codingScheme="A01">10YNL----------L</acquiring_Domain.mRID>
+    <connecting_Domain.mRID codingScheme="A01">10YNL----------L</connecting_Domain.mRID>
+    <measurement_Unit.name>MAW</measurement_Unit.name>
+    <flowDirection.direction>A02</flowDirection.direction>
+    <marketObjectStatus.status>A07</marketObjectStatus.status>
+    <Period>
+      <timeInterval>
+        <start>2026-09-10T13:45Z</start>
+        <end>2026-09-10T14:00Z</end>
+      </timeInterval>
+      <resolution>PT15M</resolution>
+      <Point>
+        <position>1</position>
+        <quantity>150.5</quantity>
+        <curveType>A03</curveType>
+      </Point>
+    </Period>
+  </TimeSeries>
+</Activation_MarketDocument>

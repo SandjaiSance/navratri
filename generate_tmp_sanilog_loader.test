@@ -1,0 +1,90 @@
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$SourceFolder,
+
+    [Parameter(Mandatory = $false)]
+    [string]$OutputSql,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateSet('none', 'delete')]
+    [string]$CleanupMode = 'none',
+
+    [Parameter(Mandatory = $false)]
+    [string]$TableName = 'tmp_sanilog'
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+if (-not (Test-Path -LiteralPath $SourceFolder -PathType Container)) {
+    throw "Source folder not found: $SourceFolder"
+}
+
+if ([string]::IsNullOrWhiteSpace($OutputSql)) {
+    $folderName = Split-Path -Path $SourceFolder -Leaf
+    $safeName = ($folderName -replace '[^A-Za-z0-9_-]', '_')
+    $OutputSql = Join-Path (Get-Location) ("load_${TableName}_clob_no_directory_${safeName}.sql")
+}
+
+function ConvertTo-SqlLiteral {
+    param([string]$Text)
+    if ($null -eq $Text) { return '' }
+    return $Text.Replace("'", "''")
+}
+
+$files = Get-ChildItem -LiteralPath $SourceFolder -File | Sort-Object Name
+if ($files.Count -eq 0) {
+    throw "No files found in folder: $SourceFolder"
+}
+
+$sb = New-Object System.Text.StringBuilder
+[void]$sb.AppendLine('set define off')
+[void]$sb.AppendLine('set serveroutput on')
+[void]$sb.AppendLine('')
+[void]$sb.AppendLine('declare')
+[void]$sb.AppendLine('  v_inserted number := 0;')
+[void]$sb.AppendLine('begin')
+
+if ($CleanupMode -eq 'delete') {
+    [void]$sb.AppendLine("  delete from $TableName;")
+    [void]$sb.AppendLine('')
+}
+
+$chunkSize = 3000
+
+foreach ($file in $files) {
+    $content = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8
+    $content = ConvertTo-SqlLiteral -Text $content
+    $fileNameSql = ConvertTo-SqlLiteral -Text $file.Name
+
+    [void]$sb.AppendLine('  declare')
+    [void]$sb.AppendLine('    l_clob clob;')
+    [void]$sb.AppendLine('  begin')
+    [void]$sb.AppendLine('    dbms_lob.createtemporary(l_clob, true);')
+
+    for ($i = 0; $i -lt $content.Length; $i += $chunkSize) {
+        $len = [Math]::Min($chunkSize, $content.Length - $i)
+        $chunk = $content.Substring($i, $len)
+        [void]$sb.AppendLine("    dbms_lob.append(l_clob, to_clob('$chunk'));")
+    }
+
+    [void]$sb.AppendLine("    insert into $TableName (tekst, clobje) values ('$fileNameSql', l_clob);")
+    [void]$sb.AppendLine('    dbms_lob.freetemporary(l_clob);')
+    [void]$sb.AppendLine('    v_inserted := v_inserted + 1;')
+    [void]$sb.AppendLine('  end;')
+    [void]$sb.AppendLine('')
+}
+
+[void]$sb.AppendLine('  commit;')
+[void]$sb.AppendLine("  dbms_output.put_line('Inserted rows: ' || v_inserted);")
+[void]$sb.AppendLine('end;')
+[void]$sb.AppendLine('/')
+[void]$sb.AppendLine('')
+[void]$sb.AppendLine("select count(*) as rows_loaded from $TableName;")
+[void]$sb.AppendLine("select tekst, dbms_lob.getlength(clobje) as clob_len from $TableName order by regel;")
+
+[System.IO.File]::WriteAllText($OutputSql, $sb.ToString(), [System.Text.UTF8Encoding]::new($false))
+
+Write-Output "Created SQL: $OutputSql"
+Write-Output "Files included: $($files.Count)"
+Write-Output "Cleanup mode: $CleanupMode"

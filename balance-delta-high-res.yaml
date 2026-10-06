@@ -1,0 +1,581 @@
+openapi: '3.0.3'
+info:
+  title: Aether - Balance Delta High resolution
+  description: |
+    **API Usage Instructions:**  
+    
+    **Recommended approach:**  
+    •  Use the "/publications/v1/balance-delta-high-res/latest" endpoint.  
+    •  Poll the endpoint five times per minute, one second after each data-refresh event on the 12th second
+          (for example: 00:00:13, 00:00:25, 00:00:37, 00:00:49, and 00:01:01).  
+    •  Responses return the most recent available 30 minutes, subject to a configurable delay imposed by TenneT.  
+    •  All timestamps are provided in UTC.  
+    •  Response format: JSON.
+    
+    **Back-up approach to retrieve missed data:**    
+    •  Use the "/publications/v1/balance-delta-high-res" endpoint.  
+    •  Poll the endpoint max. 8 times per 24H starting from 00:00 UTC with a maximum period of 4 hours. In case you would like to compile a complete data file of 24 hours, we advise to call for 00:00 – 04:00; 04:00 – 08:00; etc.   
+    •  Time stamps are provided in UTC or Local depending on the used parameter.  
+    •  Response format: JSON, CSV, XML, XSLX depending on the used parameter.  
+
+    **Backfilling your historical dataset (large quantities of data):**    
+    •  An option will be available on [https://www.tennet.eu/nl-en/grids-and-markets/transparency-data-netherlands/download-page-transparency](https://www.tennet.eu/nl-en/grids-and-markets/transparency-data-netherlands/download-page-transparency) to manually download your large dataset at once (up to 100 MB)
+
+    **note: This API is subject to rate limiting see endpoints**  
+    Exceeding these limits may result in temporary blocking of your API keys. Please ensure your usage adheres to these limits to maintain uninterrupted access.
+    
+
+  version: 1.6.0
+servers:
+  - url: https://{environment}.tennet.eu
+    variables:
+      environment:
+        default: api.acc
+        enum:
+          - api
+          - api.acc
+paths:
+  /publications/v1/balance-delta-high-res/latest:
+    get:
+      tags:
+       - Balance Delta High Res
+      summary: Get Balance Delta high res latest data
+      description: | 
+                    **Use this as a standard method to retrieve the balance delta high res data**
+                    
+                    The following rate limits apply:  
+                    
+                    **Production**
+                      - Maximum requests per second: 1
+                      - Maximum requests per minute: 10
+
+                    **Acceptance**
+                     - Maximum requests per second: 1
+                     - Maximum requests per minute: 10
+
+      operationId: request_get_latest
+      parameters:
+        - name: Accept
+          in: header
+          description: "The response type is the format of the returned answer."
+          required: true
+          schema:
+            type: string
+            example: "application/json"
+            default: application/json 
+            enum:
+              - application/json
+              - application/xml
+              - text/csv
+              - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/response_json'
+                  - $ref: '#/components/schemas/no-data'
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/response_xml'
+                  - $ref: '#/components/schemas/no-data'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/response_csv'
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: No valid API key found in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-apikey'
+        '405':
+          description: This Method is not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-method'
+        '422':
+          description: Missing information, e.g. date range or type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-missing-information'
+        '429':
+          description: Rate Limit Reached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-rate-limit'
+        '503':
+          description: This service is temporarily unavailable due to maintenance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-maintenance'
+      security:
+        - apikey:
+            - read:data
+  /publications/v1/balance-delta-high-res:
+    get:
+      tags:
+       - Balance Delta High Res
+      summary: Get Balance Delta high res data by timeframe
+      description: | 
+                    **Use this as a back up method. The maximum period is 4 hours.**
+                    
+                    The following rate limits apply:
+                    
+                    **Production**
+                      - Maximum requests per day: 8
+                      
+                    **Acceptance**
+                     - Maximum requests per day: 8 
+
+      operationId: request_balance_delta_high_res
+      parameters:
+        - name: date_from
+          in: query
+          description: "The start date and time of the requested time frame. Use datetime with Z for UTC (format: dd-mm-yyyy hh:mm:ssZ)."
+          required: true
+          schema:
+            type: string
+            pattern: '^\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}Z$'
+            example: "13-01-2025 00:00:00Z"
+        - name: date_to
+          in: query
+          description: "The end date and time of the requested time frame, maximum range is 4 hours. Use same timezone as date_from (format: dd-mm-yyyy hh:mm:ssZ)."
+          required: true
+          schema:
+            type: string
+            pattern: '^\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}Z$'
+            example: "13-01-2025 00:04:00Z"
+        - name: Accept
+          in: header
+          description: "The response type is the format of the returned answer."
+          required: true
+          schema:
+            type: string
+            enum:
+              - application/json
+              - application/xml
+              - text/csv
+              - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            example: "application/json"
+            default: application/json 
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/response_json'
+                  - $ref: '#/components/schemas/no-data'
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/response_xml'
+                  - $ref: '#/components/schemas/no-data'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/response_csv'
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: No valid API key found in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-apikey'
+        '405':
+          description: This Method is not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-method'
+        '422':
+          description: Missing information, e.g. date range or type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-missing-information'
+        '429':
+          description: Rate Limit Reached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-rate-limit'
+        '503':
+          description: This service is temporarily unavailable due to maintenance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-maintenance'
+      security:
+        - apikey:
+            - read:data
+
+components:
+  schemas:
+    response_json:
+      type: object
+      properties:
+        Response:
+          type: object
+          properties:
+            informationType:
+              type: string
+              example: "BALANCE_DELTA_HIGH_RES"
+            period.timeInterval:
+              type: object
+              properties:
+                start:
+                  type: string
+                  pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                  example: "2025-01-13T00:00:00"
+                end:
+                  type: string
+                  pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                  example: "2025-01-13T00:30:00"
+              required:
+                - start
+                - end
+            TimeSeries:
+              type: array
+              items:
+                type: object
+                properties:
+                  mRID:
+                    type: integer
+                    example: 1
+                  quantity_Measurement_Unit_name:
+                    type: string
+                    example: "MAW"
+                  currency_Unit_name:
+                    type: string
+                    example: "EUR"
+                  Period:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timeInterval:
+                          type: object
+                          properties:
+                            start:
+                              type: string
+                              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                              example: "2025-01-13T00:00:00"
+                            end:
+                              type: string
+                              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                              example: "2025-01-13T00:30:00"
+                          required:
+                            - start
+                            - end
+                        points:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              timeInterval_start:
+                                type: string
+                                pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                                example: "2025-01-13T00:00:00"
+                              timeInterval_end:
+                                type: string
+                                pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                                example: "2025-01-13T00:00:12"
+                              sequence:
+                                type: string
+                                example: "1"
+                              power_afrr_in:
+                                type: string
+                                example: "29.0"
+                                nullable: true
+                              power_afrr_out:
+                                type: string
+                                example: "163.0"
+                                nullable: true
+                              power_igcc_in:
+                                type: string
+                                example: "0.0"
+                                nullable: true
+                              power_igcc_out:
+                                type: string
+                                example: "1.0"
+                                nullable: true
+                              power_mfrrda_in:
+                                type: string
+                                example: "5.0"
+                                nullable: true
+                              power_mfrrda_out:
+                                type: string
+                                example: "2.0"
+                                nullable: true
+                              power_picasso_in:
+                                type: string
+                                example: "2.0"
+                                nullable: true
+                              power_picasso_out:
+                                type: string
+                                example: "6.0"
+                                nullable: true
+                              power_mari_in:
+                                type: string
+                                example: "1.0"
+                                nullable: true
+                              power_mari_out:
+                                type: string
+                                example: "4.0"
+                                nullable: true
+                              max_upw_regulation_price:
+                                type: string
+                                example: "0.0"
+                                nullable: true
+                              min_downw_regulation_price:
+                                type: string
+                                example: "-182.53"
+                                nullable: true
+                              mid_price:
+                                type: string
+                                example: "22.69"
+                                nullable: true
+                            required:
+                              - timeInterval_start
+                              - timeInterval_end
+                              - sequence
+                      required:
+                        - timeInterval
+                        - points
+                required:
+                  - mRID
+                  - quantity_Measurement_Unit_name
+                  - currency_Unit_name
+                  - Period
+          required:
+             - informationType
+             - period.timeInterval
+             - TimeSeries
+    response_xml:
+      type: object
+      properties:
+        Response:
+          type: object
+          properties:
+            informationType:
+              type: string
+              example: "BALANCE_DELTA_HIGH_RES"
+            period.timeInterval:
+              type: object
+              properties:
+                start:
+                  type: string
+                  pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                  example: "2025-01-13T00:00:00"
+                end:
+                  type: string
+                  pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                  example: "2025-01-14T00:00:00"
+              required:
+                - start
+                - end
+            TimeSeries:
+              type: array
+              items:
+                type: object
+                properties:
+                  mRID:
+                    type: integer
+                    example: 1
+                  quantity_Measurement_Unit_name:
+                    type: string
+                    example: "MAW"
+                  currency_Unit_name:
+                    type: string
+                    example: "EUR"
+                  Period:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timeInterval:
+                          type: object
+                          properties:
+                            start:
+                              type: string
+                              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                              example: "2025-01-13T00:00:00"
+                            end:
+                              type: string
+                              pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                              example: "2025-01-14T00:00:00"
+                          required:
+                            - start
+                            - end
+                        points:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              timeInterval_start:
+                                type: string
+                                pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                                example: "2025-01-13T00:00:00"
+                              timeInterval_end:
+                                type: string
+                                pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+                                example: "2025-01-13T00:15:00"
+                              sequence:
+                                type: string
+                                example: "1"
+                              power_afrr_in:
+                                type: string
+                                example: "29.0"
+                                nullable: true
+                              power_afrr_out:
+                                type: string
+                                example: "163.0"
+                                nullable: true
+                              power_igcc_in:
+                                type: string
+                                example: "0.0"
+                                nullable: true
+                              power_igcc_out:
+                                type: string
+                                example: "1.0"
+                                nullable: true
+                              power_mfrrda_in:
+                                type: string
+                                example: "5.0"
+                                nullable: true
+                              power_mfrrda_out:
+                                type: string
+                                example: "2.0"
+                                nullable: true
+                              power_picasso_in:
+                                type: string
+                                example: "2.0"
+                                nullable: true
+                              power_picasso_out:
+                                type: string
+                                example: "6.0"
+                                nullable: true
+                              power_mari_in:
+                                type: string
+                                example: "1.0"
+                                nullable: true
+                              power_mari_out:
+                                type: string
+                                example: "4.0"
+                                nullable: true
+                              max_upw_regulation_price:
+                                type: string
+                                example: "0.0"
+                                nullable: true
+                              min_downw_regulation_price:
+                                type: string
+                                example: "-182.53"
+                                nullable: true
+                              mid_price:
+                                type: string
+                                example: "22.69"
+                                nullable: true
+                            required:
+                              - timeInterval_start
+                              - timeInterval_end
+                              - sequence
+                      required:
+                        - timeInterval
+                        - points
+                required:
+                  - mRID
+                  - quantity_Measurement_Unit_name
+                  - currency_Unit_name
+                  - Period
+          required:
+            - informationType
+            - period.timeInterval
+            - TimeSeries
+    response_csv:
+      type: string
+      description: CSV formatted response with balance delta high resolution data
+      example: |
+          Timeinterval Start Loc,Timeinterval End Loc,Isp,Power In Activated Afrr,Power Out Activated Afrr,Power In Igcc,Power Out Igcc,Power In Mfrrda,Power Out Mfrrda,Highest Upward Regulation Price,Lowest Downward Regulation Price,Mid Price,Picasso Contribution Power In,Picasso Contribution Power Out,Mari Contribution Power In, Mari Contribution Power Out
+          2025-01-13T00:00:00,2025-01-13T00:01:00,1,0.0,408.0,0.0,273.0,0.0,0.0,,-313.50,94.36,2.0,6.0,1.0,4.0
+          2025-01-13T00:01:00,2025-01-13T00:02:00,2,0.0,322.0,0.0,207.0,0.0,0.0,,-313.50,94.36,2.0,6.0,1.0,4.0
+    no-data:
+      type: object
+      properties:
+        error:
+          type: string
+          example: No data found
+    error-apikey:
+      type: object
+      properties:
+        Error_id:
+          type: string
+          example: 6a7fa720-c20b-4ca4-a05f-f4280a26cd78
+        Error_date_time:
+          type: string
+          example: "2025-01-13T07:05:23+00:00"
+        Error_message:
+          type: string
+          example: "No valid API key found in request"
+    error-method:
+      type: object
+      properties:
+        Error_id:
+          type: string
+          example: 6a7fa720-c20b-4ca4-a05f-f4280a26cd78
+        Error_date_time:
+          type: string
+          example: "2025-01-13T07:05:23+00:00"
+        Error_message:
+          type: string
+          example: "User defined resource error or wrong HTTP Method used, for details please see HTTP status code"
+    error-missing-information:
+      type: object
+      properties:
+        Error_id:
+          type: string
+          example: 6a7fa720-c20b-4ca4-a05f-f4280a26cd78
+        Error_date_time:
+          type: string
+          example: "2025-01-13T07:05:23+00:00"
+        Error_message:
+          type: string
+          example: "Invalid date format! Date format must be \"dd-mm-yyyy hh24:mi:ss\""
+    error-rate-limit:
+      type: object
+      properties:
+        Error_id:
+          type: string
+          example: 6a7fa720-c20b-4ca4-a05f-f4280a26cd78
+        Error_date_time:
+          type: string
+          example: "2025-01-13T07:05:23+00:00"
+        Error_message:
+          type: string
+          example: "Rate limit exceeded"
+    error-maintenance:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "This service is temporarily unavailable due to maintenance."
+  securitySchemes:
+    apikey:
+      type: apiKey
+      name: apikey
+      in: header
+      description: API key required to access the endpoints. Exceeding rate limits may result in temporary blocking of your API key.

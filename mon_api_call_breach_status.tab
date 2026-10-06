@@ -1,0 +1,11 @@
+drop table if exists mon_api_call_breach_status;
+
+CREATE TABLE mon_api_call_breach_status (
+    information_type        varchar2(100) not null, 
+    request_frequency       varchar2(50)  not null, 
+    call_source             varchar2(20)  not null,  -- 'DOWNLOAD' or 'API_CALL'
+    in_breach               VARCHAR2(6),        -- 'TRUE' or 'FALSE'
+    breach_start_utc        TIMESTAMP,          -- Wanneer breach begint
+    last_breach_checked_utc TIMESTAMP,
+    PRIMARY KEY (information_type, request_frequency, call_source)
+);
